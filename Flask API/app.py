@@ -19,7 +19,7 @@ def predict():
         ### Penting Start
         symptoms_data = request.json
         user_input = symptoms_data.get('symptoms', [])
-        print(user_input)
+        
         target_class = ['(vertigo) Paroymsal  Positional Vertigo', 'AIDS', 'Acne', 'Alcoholic hepatitis',
                         'Allergy', 'Arthritis', 'Bronchial Asthma', 'Cervical spondylosis', 'Chicken pox',
                         'Chronic cholestasis', 'Common Cold', 'Dengue', 'Diabetes ', 'Dimorphic hemmorhoids(piles)',
@@ -48,16 +48,11 @@ def predict():
         final_user_input = pd.concat([pd.DataFrame(columns=original_data.columns), user_input_encoded], axis=0)
         final_user_input = final_user_input.drop(['Disease'],axis = 1)
         user_tensor = tf.convert_to_tensor(final_user_input.values, dtype=tf.float32)
-        
-
 
         predict_proba = model.predict(user_tensor)
         predicted_class_index = np.argmax(predict_proba)
-        print(f'User tensor[0]: {user_tensor[0]}\nClass Index: {predicted_class_index}')
         prediction = target_class[predicted_class_index]
-        print(prediction)
-        ### Penting End
-
+    
     return jsonify({"Prediction": prediction})
 
 if __name__ == "__main__":
